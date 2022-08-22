@@ -1,57 +1,41 @@
 'use strict';
 
-const DomElement = function (selector, height, width, bg, fontSize) {
+const DomElement = function (selector, height, width, bg, fontSize, position) {
   this.selector = selector;
   this.height = height;
   this.width = width;
   this.bg = bg;
   this.fontSize = fontSize;
+  this.position = position;
 };
 
-DomElement.prototype.createSelector = function (
-  selector,
-  height,
-  width,
-  bg,
-  fontSize,
-  position
-) {
-  if (selector[0] === '.') {
-    console.log(selector);
-    const elem = document.createElement('div');
-    elem.setAttribute('class', selector.slice(1));
-    document.body.appendChild(elem);
-    elem.textContent = selector;
-    elem.style.cssText = `height: ${height}; width: ${width}; background-color: ${bg}; font-size: ${fontSize}; position: ${position}`;
+DomElement.prototype.createSelector = function () {
+  let elem;
+  if (this.selector[0] === '.') {
+    elem = document.createElement('div');
+    elem.setAttribute('class', this.selector.slice(1));
+  }
+  if (this.selector[0] === '#') {
+    elem = document.createElement('p');
+    elem.setAttribute('id', this.selector.slice(1));
   }
 
-  if (selector[0] === '#') {
-    console.log(selector);
-
-    const elem = document.createElement('p');
-    elem.setAttribute('id', selector.slice(1));
-    document.body.appendChild(elem);
-    elem.textContent = selector;
-    elem.style.cssText = `height: ${height}; width: ${width}; background-color: ${bg}; font-size: ${fontSize}; position: ${position}`;
-  }
+  document.body.appendChild(elem);
+  elem.textContent = this.selector;
+  elem.style.cssText = `height: ${this.height}; width: ${this.width}; background-color: ${this.bg}; font-size: ${this.fontSize}; position: ${this.position}`;
 };
 
-const newDomElement = function (selector, height, width, bg, fontSize) {
-  DomElement.call(this, selector, height, width, bg, fontSize);
-  // this.text = text;
-};
-
-newDomElement.prototype = Object.create(DomElement.prototype);
-
-const test = new newDomElement();
+const test = new DomElement(
+  '.block',
+  '100px',
+  '100px',
+  'red',
+  '30px',
+  'absolute'
+);
 
 console.log(test);
-console.log(
-  test.createSelector('.block', '100px', '100px', 'red', '30px', 'absolute')
-);
-console.log(
-  test.createSelector('#p', '100px', '100px', 'green', '30px', 'absolute')
-);
+console.log(test.createSelector());
 
 document.addEventListener('DOMContentLoaded', () => {
   const elem = document.querySelector('.block');
